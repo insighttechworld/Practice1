@@ -1,0 +1,203 @@
+-------------
+Cloud Computing - AWS
+-------------
+
+
+The Five Characteristics of Cloud Computing
+---
+• On-demand self service:
+  Users can provision resources and use them without human interaction from the service provider
+
+• Broad network access:
+  Resources available over the network, and can be accessed by diverse client platforms
+  
+• Multi-tenancy and resource pooling:
+  Multiple customers can share the same infrastructure and applications with security and privacy
+  Multiple customers are serviced from the same physical resources
+  
+• Rapid elasticity and scalability:
+  Automatically and quickly acquire and dispose resources when needed
+  Quickly and easily scale based on demand
+
+• Measured service:
+  Usage is measured, users pay correctly for what they have used
+  
+
+Tour of the AWS Console
+---
+• AWS has Global Services:
+  Identity and Access Management (IAM)
+  Route 53 (DNS service)
+  CloudFront (Content Delivery Network)
+  WAF (Web Application Firewall)
+
+• Most AWS services are Region-scoped:
+  Amazon EC2 (Infrastructure as a Service)
+  Elastic Beanstalk (Platform as a Service)
+  Lambda (Function as a Service)
+  Rekognition (Software as a Service)
+
+
+
+AWS IAM - Identity Access Management
+------------------------------------
+
+What is IAM?
+AWS Identity and Access Management (IAM) is a web service for securely controlling access to AWS resources. It enables you to create and control services for user authentication or limit access to a certain set of people who use your AWS resources.
+
+IAM allow you to manage users and their level of access to the AWS console. IAM enables you to manage access to AWS services and resources in a very secure manner. With IAM you can create groups and allow those users or groups to access some servers, or you can deny them access to the service.
+
+How Does IAM Work?
+The IAM workflow includes the following six elements:
+
+A principal is an entity that can perform actions on an AWS resource. A user, a role or an application can be a principal.
+
+Authentication is the process of confirming the identity of the principal trying to access an AWS product. The principal must provide its credentials or required keys for authentication.
+
+
+Components of IAM
+* Users
+* Groups
+* Policies
+
+>>Users
+An IAM user is an identity with an associated credential and permissions attached to it. This could be an actual person who is a user, or it could be an application that is a user. With IAM, you can securely manage access to AWS services by creating an IAM user name for each employee in your organization. Each IAM user is associated with only one AWS account. 
+
+>>Groups
+A collection of IAM users is an IAM group. You can use IAM groups to specify permissions for multiple users so that any permissions applied to the group are applied to the individual users in that group as well. Managing groups is quite easy. You set permissions for the group, and those permissions are automatically applied to all the users in the group. If you add another user to the group, the new user will automatically inherit all the policies and the permissions already assigned to that group.
+
+>>Policies
+An IAM policy sets permission and controls access to AWS resources. Policies are stored in AWS as JSON (JavaScript Object Notations) documents. Permissions specify who has access to the resources and what actions they can perform.
+
+Lab Session
+---
+
+- AWS Management Console
+- Security, Identity, & Compliance
+- IAM
+
+Multi Factor Authentication - MFA
+
+
+Creating a Group
+AWS Console
+IAM
+Group
+Create a Group
+Give a name (sysadmin, database, security, networking)
+Choose applicable policies
+Create Group
+
+
+How can users access AWS ?
+• To access AWS, you have three options:
+• AWS Management Console (protected by password + MFA)
+• AWS Command Line Interface (CLI): protected by access keys
+• Access Keys are generated through the AWS Console
+• Users manage their own access keys
+• Access Keys are secret, just like a password. Don’t share them
+• Access Key ID ~= username
+• Secret Access Key ~= password
+
+
+
+EC2 Session
+---
+
+Elastic Compute Cloud (EC2)
+Among the vast array of services that Amazon offers, EC2 is the core compute component of the technology stack. In practice, EC2 makes life easier for developers by providing secure, and resizable compute capacity in the cloud. It greatly eases the process of scaling up or down, can be integrated into several other services, and comes with a plan where you only pay for how much you use it.  
+
+EC2 is virtual computing environment which is know as 'instance'
+
+
+What is bootstrap script in AWS?
+---
+Bootstrap Script(Bootstrapping) in AWS - Bootstrapping allows us to write and put a startup script while launching an EC2 Instance so that it execute automatically as soon as the instance launch.
+
+Let’s suppose you have to launch an ec2 instances with Apache HTTPD installed on the System.So instead of installing HTTPD  the server  manually , you can launch EC2 Instances using Bootstrap Script.
+
+
+How to Use Bootstrap Script in AWS?
+---
+
+- Login to your AWS Account and Launch an Instance
+- Launch an EC2 Linux Instance with Amazon Linux 2 as an O/S
+- Under Configure Instance in Advance Details put the following Example Bash Script. You can put any other script  as per your requirement and use case.
+
+ 
+#! /bin/bash
+sudo yum update -y
+sudo yum install httpd -y
+sudo service httpd start && sudo chkconfig httpd on
+
+
+
+To launch the EC2 Instance
+---
+Open the Amazon EC2 console
+
+Choose Launch Instance.
+
+In Step 1: Choose an Amazon Machine Image (AMI), find an Amazon Linux 2 AMI at the top of the list and choose Select.
+
+In Step 2: Choose an Instance Type, choose Next: Configure Instance Details.
+
+In Step 3: Configure Instance Details, provide the following information:
+
+Leave Number of instances at one.
+
+Leave Purchasing option at the default setting.
+
+Choose Next: Add Storage.
+
+Choose Next: Add Tags.
+
+Name your instance and choose Next: Configure Security Group.
+
+Configure Security Group, set Assign a security group to Select an existing security group. You can choose the default security group 
+
+You can't access your EC2 instance by Secure Shell (SSH) using this security group. SSH access isn't required for this exercise. To add access by SSH later, you can edit the default security and add a rule to allow SSH. Or you can create a new security group that allows SSH. You can use the following settings to add SSH access:
+
+Type: SSH
+
+Protocol: TCP
+
+Port Range: 22
+
+Source: Anywhere 0.0.0.0/0
+
+Choose Review and Launch.
+
+Choose Launch.
+
+Select the check box for the key pair that you created, and then choose Launch Instances.
+
+
+Definition of Terms
+----
+AMI
+An Amazon Machine Image is a special type of virtual appliance that is used to create a virtual machine within the Amazon Elastic Compute Cloud. It serves as the basic unit of deployment for services delivered using EC2.
+
+Instance Type
+Amazon EC2 provides a total of 8 family of instance types which are classified according to their use cases. Instance types comprise varying combinations of CPU, memory, storage and networking capacity to give the client a flexibility to choose the appropriate mix of resources for your applications.
+
+Security Group
+A security group acts as a virtual firewall for your EC2 instances to control incoming and outgoing traffic. Inbound rules control the incoming traffic to your instance, and outbound rules control the outgoing traffic from your instance. If you don't specify a security group, Amazon EC2 uses the default security group. There is no charge applicable to Security Groups in Amazon EC2 / Amazon VPC.
+
+Key Pair
+A key pair, consisting of a public key and a private key, is a set of security credentials that you use to prove your identity when connecting to an Amazon EC2 instance. Amazon EC2 stores the public key on your instance, and you store the private key. ... When you launch an instance, you are prompted for a key pair.
+
+How to Create a Public/Private Key Pair
+---
+Start the key generation program. 
+Enter the path to the file that will hold the key.
+Enter a passphrase for using your key.
+Re-enter the passphrase to confirm it. 
+Check the results. 
+
+
+Difference between Pivate and Public Keys
+---
+Public key cryptography allows someone to send their public key in an open, insecure channel. Having a friend's public key allows you to encrypt messages to them. Your private key is used to decrypt messages encrypted to you.
+
+The public key is public and open to anyone in the system. The private key however is private, only stored on user's device, and is used to decrypt data.

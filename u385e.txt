@@ -1,0 +1,227 @@
+-----------------------------------
+Continuous Integration with Jenkins
+-----------------------------------
+
+
+Some Jenkins Features and Terms
+
+**Plugins in Jenkins?
+Plugins are the primary means of enhancing the functionality of a Jenkins environment to suit organization- or user-specific needs. There are over a thousand different plugins which can be installed on a Jenkins master and to integrate various build tools, cloud providers, analysis tools, and much more.
+
+
+First Install Java
+---
+sudo yum install java-1.8*
+java -version
+
+
+Configure/Set Java Home
+---
+find /usr/lib/jvm/java-1.8* | head -n 3
+
+copy and keep:
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.amzn2.0.1.x86_64
+
+cd ~
+pwd
+vi .bash_profile
+
+Go directly under #user specific and paste the below:
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.amzn2.0.1.x86_64
+then add :$JAVA_HOME in front of the PATH...
+
+----
+That will make the file look as below:
+# User specific environment and startup programs
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.amzn2.0.1.x86_64
+PATH=$PATH:$HOME/.local/bin:$HOME/bin:$JAVA_HOME
+----
+
+Save and Quit
+esc :wq!
+
+source .bash_profile
+
+
+Jenkins Installlation:
+----------------------
+sudo amazon-linux-extras install epel
+sudo yum install daemonize -y
+sudo yum install jenkins -y
+
+
+>>Jenkins Installation and Setup
+
+- https://www.jenkins.io/
+- Documentation
+- choose Installing Jenkins
+- choose the platform/OS
+- the follow the installation instructions
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum upgrade
+sudo yum install epel-release java-11-openjdk-devel
+sudo yum install jenkins
+sudo systemctl daemon-reload
+
+
+>>Start Jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+
+
+>>Access Jenkins
+ http://<public_ip_address>:8080 
+ http://3.91.189.114:8080 
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+# cd /var/lib
+# yum install jenkins -y
+After a succesfull installtions, need to enable jenkins service and access jenkins on web browser suing the below:
+
+ip-address:8080
+
+
+# cd /var/lib/jenkins
+
+# cat /var/lib/jenkins/secrets/initialAdminPassword
+ed1a442249a945f5ad682a895b319284
+
+
+
+
+
+
+
+>>>After the installation of Jenkins, their is need to setup java's home
+
+# find /usr/lib/jvm/java-1.8* | head -n 3
+/usr/lib/jvm/java-1.8.0
+/usr/lib/jvm/java-1.8.0-openjdk
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.275.b01-0.el7_9.x86_64
+
+# cd ~
+# vi .bash_profile  --> and add the following 
+
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.275.b01-0.el7_9.x86_64
+PATH=$PATH:$HOME/bin:$JAVA_HOME
+
+After that, you need to log out and log back in for the setup to take effect on the file or you use the below command:
+# source .bash_profile
+
+
+
+Let's Install and Setup Git for Jenkins Integration
+# yum install git -y  --> on our Jenkins server
+
+Go back to Jenkins Console/Webpage
+Need to install Git plugin
+
+- Jenkins Dashboard
+- Manage Jenkins
+- Manage Plugins
+- Choose Available
+- Type Github in the search bar
+- Scroll down to select Github and Github Integration
+- Install without restart
+
+Next is to setup Git
+- Manage Jenkins
+- Global Tool Configuration
+- Scroll to Git
+- Name: github
+  Path: git
+- Apply and Save
+
+
+https://github.com/insighttechworld/hello-world
+
+Apache Maven
+Maven is a powerful project management tool that is based on POM (project object model). It is used for projects build, dependency and documentation. It simplifies the build process like ANT. ... In short terms we can tell maven is a tool that can be used for building and managing any Java-based project.
+
+Making the build process easy
+Providing a uniform build system
+Providing quality project information
+Encouraging better development practices
+Making the build process easy
+While using Maven doesn’t eliminate the need to know about the underlying mechanisms, Maven does shield developers from many details.
+
+What is POM XML Maven?
+POM is an acronym for Project Object Model. The pom. xml file contains information of project and configuration information for the maven to build the project such as dependencies, build directory, source directory, test source directory, plugin, goals etc. Maven reads the pom. xml file, then executes the goal.
+POM - Project Object Model
+XML - Extensive Markup Language
+
+
+Maven Setup
+
+google.com
+search for maven download
+choose the mave official website
+and copy the bin.zp file
+
+cd /opt
+wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip
+ls -l 
+unzip apache-maven-3.6.3
+mv apache-maven-3.6.3 maven
+cp maven /opt
+cd /opt/maven
+pwd
+
+/opt/maven
+
+Let's set maven path
+
+cd ~
+vi .bash_profile
+
+M2_HOME=/opt/maven
+M2=/opt/maven
+:$M2:$M2_HOME   --> should be included to the line 'PATH'
+
+save and quit
+
+# source .bash_profile
+
+# mvn --version
+# echo $M2_HOME
+# echo $M2
+
+
+
+>>Now go to Jenkins to coomplete the configuration
+Install maven plugin
+- Manage Jenkins
+- Manage Plugins
+- Available
+- search for maven
+- choose Maven Integration & Maven Invoker
+- Install without save
+
+>>Now to Setup Maven path
+- Manage Jenkins
+- Global Tool COnfiguration
+- scroll to Maven
+- Add Maven
+    Name: M2_HOME
+    Maven Home: /opt/maven
+Apply & Save
+
+Now Let's build our first maven job
+- New Item
+- Name: First_Maven_Job
+- Select Maven Project
+- Ok
+- Description
+- Source Code Manager
+- Git
+- Copy the repository url and paste here
+- Branch */Master
+- Build
+- Root POM: pom.xml
+- Goals and options: clean install package
+- Apply and Save
+- Build Now
